@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:payflow/shared/auth/auth_controller.dart';
 
 class LoginController {
-  final authController = AuthController();
+  final authController = Get.put(AuthController());
 
   Future<void> googleSignIn() async {
     GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -21,19 +22,9 @@ class LoginController {
           accessToken: googleAuth.accessToken,
           idToken: googleAuth.idToken,
         );
-        await socialSignIn(credential);
+        await authController.socialSignIn(credential);
       }
     } catch (error) {
-      authController.loginFailure();
-    }
-  }
-
-  Future<void> socialSignIn(OAuthCredential credential) async {
-    try {
-      final userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      authController.setUser(userCredential);
-    } catch (e) {
       authController.loginFailure();
     }
   }
