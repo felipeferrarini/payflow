@@ -30,6 +30,7 @@ class AuthController extends GetxController {
   }
 
   Future<void> getCurrentUser() async {
+    await Future.delayed(Duration(seconds: 2));
     final instanse = await SharedPreferences.getInstance();
     if (instanse.containsKey('user')) {
       final credentials =
@@ -38,9 +39,6 @@ class AuthController extends GetxController {
         accessToken: credentials.accessToken,
         idToken: credentials.idToken,
       );
-
-      print(credentials);
-      print(authCredentials);
       socialSignIn(authCredentials);
     } else {
       loginFailure();
