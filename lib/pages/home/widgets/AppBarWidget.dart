@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:payflow/shared/auth/auth_controller.dart';
+
 import 'package:payflow/shared/themes/app_colors.dart';
 import 'package:payflow/shared/themes/app_text_styles.dart';
 
 class AppBarWidget extends StatelessWidget {
-  const AppBarWidget({
-    Key? key,
-  }) : super(key: key);
+  final authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -20,16 +21,18 @@ class AppBarWidget extends StatelessWidget {
       ),
       child: Center(
         child: ListTile(
-          title: Text.rich(
-            TextSpan(
-              text: 'Olá, ',
-              style: TextStyles.titleRegular,
-              children: [
-                TextSpan(
-                  text: 'Felipe',
-                  style: TextStyles.titleBoldBackground,
-                )
-              ],
+          title: Obx(
+            () => Text.rich(
+              TextSpan(
+                text: 'Olá, ',
+                style: TextStyles.titleRegular,
+                children: [
+                  TextSpan(
+                    text: authController.user.displayName,
+                    style: TextStyles.titleBoldBackground,
+                  )
+                ],
+              ),
             ),
           ),
           subtitle: Text(
@@ -43,6 +46,7 @@ class AppBarWidget extends StatelessWidget {
               color: Colors.black,
               borderRadius: BorderRadius.circular(10),
             ),
+            child: Obx(() => Image.network(authController.user.photoURL ?? '')),
           ),
         ),
       ),

@@ -15,12 +15,13 @@ class BarcodeController extends GetxController {
 
   InputImage? imagePicker;
 
+  CameraController? cameraController;
+
   @override
   void onInit() {
     getAvailableCameras();
     statusGetx.listen((value) {
       if (value.hasBarcode) {
-        print(value.barcode);
         Get.offNamed('/insert_boleto');
       }
       if (value.hasError) {
@@ -34,7 +35,7 @@ class BarcodeController extends GetxController {
   void dispose() {
     barcodeScanner.close();
     if (status.showCamera) {
-      status.cameraController!.dispose();
+      cameraController!.dispose();
     }
     super.dispose();
   }
@@ -45,14 +46,14 @@ class BarcodeController extends GetxController {
       final camera = response.firstWhere(
         (element) => element.lensDirection == CameraLensDirection.back,
       );
-      final cameraController = CameraController(
+      cameraController = CameraController(
         camera,
-        ResolutionPreset.medium,
+        ResolutionPreset.max,
         enableAudio: false,
       );
-      await cameraController.initialize();
-      status = BarcodeStatus.available(cameraController);
+      await cameraController!.initialize();
       scanWithCamera();
+      listenCamera();
     } catch (e) {
       status = BarcodeStatus.error(e.toString());
     }
@@ -60,10 +61,6 @@ class BarcodeController extends GetxController {
 
   Future<void> scannerBarCode(InputImage inputImage) async {
     try {
-      if (status.cameraController != null) {
-        if (status.cameraController!.value.isStreamingImages)
-          status.cameraController!.stopImageStream();
-      }
       final barcodes = await barcodeScanner.processImage(inputImage);
       var barcode;
       for (Barcode item in barcodes) {
@@ -72,9 +69,8 @@ class BarcodeController extends GetxController {
 
       if (barcode != null && status.barcode.isEmpty) {
         status = BarcodeStatus.barcode(barcode);
-        if (status.cameraController != null) status.cameraController!.dispose();
-      } else {
-        getAvailableCameras();
+        cameraController!.dispose();
+        await barcodeScanner.close();
       }
 
       return;
@@ -84,28 +80,24 @@ class BarcodeController extends GetxController {
   }
 
   void scanWithImagePicker() async {
-    await status.cameraController!.stopImageStream();
     final response = await ImagePicker().getImage(source: ImageSource.gallery);
     final inputImage = InputImage.fromFilePath(response!.path);
     scannerBarCode(inputImage);
   }
 
   void scanWithCamera() {
-    Future.delayed(Duration(seconds: 10)).then((value) {
-      if (status.cameraController != null) {
-        if (status.cameraController!.value.isStreamingImages)
-          status.cameraController!.stopImageStream();
-      }
-      status = BarcodeStatus.error("Timeout de leitura de boleto");
+    status = BarcodeStatus.available();
+    Future.delayed(Duration(seconds: 5)).then((value) {
+      if (status.hasBarcode == false)
+        status = BarcodeStatus.error("Timeout de leitura de boleto");
     });
-    listenCamera();
   }
 
   void listenCamera() {
-    if (status.cameraController != null) {
-      if (status.cameraController!.value.isStreamingImages == false)
-        status.cameraController!.startImageStream(
-          (cameraImage) async {
+    if (cameraController!.value.isStreamingImages == false)
+      cameraController!.startImageStream(
+        (cameraImage) async {
+          if (status.stopScanner == false) {
             try {
               final WriteBuffer allBytes = WriteBuffer();
               for (Plane plane in cameraImage.planes) {
@@ -121,7 +113,7 @@ class BarcodeController extends GetxController {
               final InputImageFormat inputImageFormat =
                   InputImageFormatMethods.fromRawValue(
                           cameraImage.format.raw) ??
-                      InputImageFormat.YUV420;
+                      InputImageFormat.NV21;
               final planeData = cameraImage.planes.map(
                 (Plane plane) {
                   return InputImagePlaneMetadata(
@@ -142,13 +134,12 @@ class BarcodeController extends GetxController {
                 bytes: bytes,
                 inputImageData: inputImageData,
               );
-              await Future.delayed(Duration(seconds: 3));
-              await scannerBarCode(inputImageCamera);
+              scannerBarCode(inputImageCamera);
             } catch (e) {
               print(e);
             }
-          },
-        );
-    }
+          }
+        },
+      );
   }
 }

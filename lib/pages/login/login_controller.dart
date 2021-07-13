@@ -4,7 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:payflow/shared/auth/auth_controller.dart';
 
 class LoginController {
-  final authController = Get.put(AuthController());
+  final authController = Get.find<AuthController>();
 
   Future<void> googleSignIn() async {
     GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -23,6 +23,7 @@ class LoginController {
           idToken: googleAuth.idToken,
         );
         await authController.socialSignIn(credential);
+        Get.offNamed("/home");
       }
     } catch (error) {
       authController.loginFailure();

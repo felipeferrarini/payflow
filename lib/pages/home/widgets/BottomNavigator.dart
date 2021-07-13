@@ -4,12 +4,7 @@ import 'package:payflow/pages/home/home_controller.dart';
 import 'package:payflow/shared/themes/app_colors.dart';
 
 class BottomNavigator extends StatelessWidget {
-  const BottomNavigator({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
-
-  final HomeController controller;
+  final controller = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +15,16 @@ class BottomNavigator extends StatelessWidget {
         children: [
           IconButton(
             onPressed: () {
-              controller.setPage(0);
+              controller.setCurrentPage(0);
             },
-            icon: Icon(
-              Icons.home,
-              color: AppColors.primary,
-              size: 30,
+            icon: Obx(
+              () => Icon(
+                Icons.home,
+                color: controller.currentPage == 0
+                    ? AppColors.primary
+                    : AppColors.body,
+                size: 30,
+              ),
             ),
           ),
           Container(
@@ -38,7 +37,8 @@ class BottomNavigator extends StatelessWidget {
             child: IconButton(
               onPressed: () {
                 print('asdasd');
-                Get.toNamed('/barcode');
+                // Get.toNamed('/barcode');
+                Get.toNamed('/insert_boleto');
               },
               icon: Icon(
                 Icons.add_box_outlined,
@@ -49,12 +49,16 @@ class BottomNavigator extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              controller.setPage(1);
+              controller.setCurrentPage(1);
             },
-            icon: Icon(
-              Icons.description_outlined,
-              color: AppColors.body,
-              size: 30,
+            icon: Obx(
+              () => Icon(
+                Icons.description_outlined,
+                color: controller.currentPage == 1
+                    ? AppColors.primary
+                    : AppColors.body,
+                size: 30,
+              ),
             ),
           ),
         ],

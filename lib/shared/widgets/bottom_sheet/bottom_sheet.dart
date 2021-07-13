@@ -29,16 +29,22 @@ class BottomSheetWidget extends StatelessWidget {
     return RotatedBox(
       quarterTurns: 1,
       child: Container(
-        color: AppColors.shape,
+        color: Colors.black.withOpacity(0.4),
         child: Column(
           children: [
             Expanded(
-              child: Container(
-                color: Colors.transparent,
-              ),
+              child: Container(),
             ),
             Container(
-              height: size.width * 0.33,
+              height: size.width * 0.40,
+              width: double.maxFinite,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(40),
+                  topRight: Radius.circular(40),
+                ),
+                color: AppColors.background,
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

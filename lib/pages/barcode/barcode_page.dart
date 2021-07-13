@@ -17,7 +17,7 @@ class BarcodePage extends StatelessWidget {
           Obx(() {
             if (controller.status.showCamera) {
               return Container(
-                child: controller.status.cameraController!.buildPreview(),
+                child: controller.cameraController!.buildPreview(),
               );
             }
 
@@ -61,7 +61,10 @@ class BarcodePage extends StatelessWidget {
               ),
               bottomNavigationBar: SetLabelButtons(
                 primaryLabel: 'Inserir código do boleto',
-                primaryOnPressed: () {},
+                enablePrimaryColor: true,
+                primaryOnPressed: () {
+                  Get.offNamed('/insert_boleto');
+                },
                 secondaryLabel: 'Adicionar da galeria',
                 secondaryOnPressed: () {},
               ),
@@ -75,10 +78,12 @@ class BarcodePage extends StatelessWidget {
                     'Tente escanear novamente ou digite o código do seu boleto.',
                 primaryLabel: 'Escanear novamente',
                 primaryOnPressed: () {
-                  controller.getAvailableCameras();
+                  controller.scanWithCamera();
                 },
                 secondaryLabel: 'Digitar código',
-                secondaryOnPressed: () {},
+                secondaryOnPressed: () {
+                  Get.offNamed('/insert_boleto');
+                },
               );
             }
             return Container();

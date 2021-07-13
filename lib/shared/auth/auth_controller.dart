@@ -4,23 +4,31 @@ import 'package:payflow/shared/models/user_credential_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthController extends GetxController {
-  Rx<User?> _user = null.obs;
+  Rx<Object> _user = Object().obs;
 
-  get user => _user;
+  User get user => _user.value as User;
 
-  void setUser(User? user) {
-    if (user != null) {
-      _user = user.obs;
-      Get.offAllNamed("/home");
-      return;
+  @override
+  void onInit() {
+    getCurrentUser();
+    super.onInit();
+  }
+
+  void setUser(User user) {
+    _user.value = user;
+
+    if (Get.currentRoute != "/home") {
+      Get.offNamed("/home");
     }
 
-    loginFailure();
+    return;
   }
 
   void loginFailure() {
-    _user = null.obs;
-    Get.offAllNamed("/login");
+    _user.value = Object();
+    if (Get.currentRoute != "/login") {
+      Get.offAllNamed("/login");
+    }
   }
 
   Future<void> saveUserCredential(UserCredentialModel credentials) async {
@@ -30,7 +38,6 @@ class AuthController extends GetxController {
   }
 
   Future<void> getCurrentUser() async {
-    await Future.delayed(Duration(seconds: 2));
     final instanse = await SharedPreferences.getInstance();
     if (instanse.containsKey('user')) {
       final credentials =
@@ -53,7 +60,9 @@ class AuthController extends GetxController {
       ));
       final userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
-      setUser(userCredential.user);
+      if (userCredential.user != null) {
+        setUser(userCredential.user!);
+      }
     } catch (e) {
       loginFailure();
     }
