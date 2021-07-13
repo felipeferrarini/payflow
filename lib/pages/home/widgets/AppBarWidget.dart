@@ -39,14 +39,23 @@ class AppBarWidget extends StatelessWidget {
             'Mantenha suas contas em dia',
             style: TextStyles.captionShape,
           ),
-          trailing: Container(
-            height: 48,
-            width: 48,
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(10),
+          trailing: InkWell(
+            onTap: () {
+              Get.toNamed("/user_info");
+            },
+            child: Obx(
+              () => Container(
+                height: 48,
+                width: 48,
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image: NetworkImage(authController.user.photoURL ?? ''),
+                  ),
+                ),
+              ),
             ),
-            child: Obx(() => Image.network(authController.user.photoURL ?? '')),
           ),
         ),
       ),

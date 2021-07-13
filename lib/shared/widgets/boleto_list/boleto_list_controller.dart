@@ -8,8 +8,10 @@ class BoletoListController extends GetxController {
   List<BoletoModel> get boletos => _boletos;
   set boletos(List<BoletoModel> boletos) => _boletos.value = boletos;
 
-  BoletoListController() {
+  @override
+  void onInit() {
     getBoletos();
+    super.onInit();
   }
 
   Future<void> getBoletos() async {

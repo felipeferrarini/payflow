@@ -36,9 +36,7 @@ class BottomNavigator extends StatelessWidget {
             ),
             child: IconButton(
               onPressed: () {
-                print('asdasd');
-                // Get.toNamed('/barcode');
-                Get.toNamed('/insert_boleto');
+                Get.toNamed('/barcode');
               },
               icon: Icon(
                 Icons.add_box_outlined,

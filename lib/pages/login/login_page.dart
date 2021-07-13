@@ -14,6 +14,7 @@ class LoginPage extends StatelessWidget {
 
     return Container(
       child: Scaffold(
+        backgroundColor: AppColors.background,
         body: Container(
           height: size.height,
           width: size.width,
@@ -27,12 +28,30 @@ class LoginPage extends StatelessWidget {
               Center(
                 child: Column(
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: size.height * 0.05),
-                      child: Image.asset(
-                        AppImages.person,
-                        height: size.height * 0.45,
-                      ),
+                    Stack(
+                      alignment: Alignment.bottomCenter,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: size.height * 0.05),
+                          child: Image.asset(
+                            AppImages.person,
+                            height: size.height * 0.45,
+                          ),
+                        ),
+                        Container(
+                          height: size.height * 0.11,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                AppColors.background.withOpacity(0),
+                                AppColors.background,
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: size.height * 0.025),

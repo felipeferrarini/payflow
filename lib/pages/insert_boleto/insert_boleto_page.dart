@@ -10,12 +10,6 @@ import 'package:payflow/shared/widgets/input_text/input_text.dart';
 import 'package:payflow/shared/widgets/set_label_button/set_label_button.dart';
 
 class InsertBoletoPage extends StatelessWidget {
-  final String? barcode;
-  InsertBoletoPage({
-    Key? key,
-    this.barcode,
-  }) : super(key: key);
-
   final controler = InsertBoletoController();
 
   final moneyInputTextController = MoneyMaskedTextController(
@@ -24,7 +18,9 @@ class InsertBoletoPage extends StatelessWidget {
   );
 
   final dueDateInputController = MaskedTextController(mask: "00/00/0000");
-  final barcodeInputController = TextEditingController();
+  final barcodeInputController = TextEditingController(
+    text: Get.arguments,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +85,6 @@ class InsertBoletoPage extends StatelessWidget {
                       },
                     ),
                     InputTextWidget(
-                      initialValue: barcode,
                       validator: controler.validateCodigo,
                       controller: barcodeInputController,
                       label: "Código",
@@ -113,7 +108,6 @@ class InsertBoletoPage extends StatelessWidget {
         secondaryLabel: "Cadastrar",
         secondaryOnPressed: () async {
           await controler.cadastrarBoleto();
-          Get.back();
         },
         enableSecondaryColor: true,
       ),
