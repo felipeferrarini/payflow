@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:payflow/shared/models/user_credential_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthController extends GetxController {
+  CollectionReference users = FirebaseFirestore.instance.collection("users");
+
   Rx<Object> _user = Object().obs;
 
   User get user => _user.value as User;
@@ -14,8 +17,19 @@ class AuthController extends GetxController {
     super.onInit();
   }
 
+  Future<void> createUserDocument(String userUid) async {
+    final userExist =
+        await users.doc(userUid).get().then((value) => value.exists);
+
+    if (!userExist) {
+      await users.doc(userUid).set({'boletos': []});
+    }
+  }
+
   void setUser(User user) {
     _user.value = user;
+
+    createUserDocument(user.uid);
 
     if (Get.currentRoute != "/home") {
       Get.offNamed("/home");
