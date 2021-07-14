@@ -70,5 +70,6 @@ class AuthController extends GetxController {
 
   Future<void> socialSignOut() async {
     await FirebaseAuth.instance.signOut();
+    Get.offAllNamed("/login");
   }
 }

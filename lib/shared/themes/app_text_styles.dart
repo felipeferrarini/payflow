@@ -113,4 +113,9 @@ class TextStyles {
     fontWeight: FontWeight.w600,
     color: AppColors.body,
   );
+  static final captionBoldDelete = GoogleFonts.inter(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: AppColors.delete,
+  );
 }

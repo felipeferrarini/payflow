@@ -10,8 +10,10 @@ class AppBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Container(
-      height: 152,
+      height: size.height * 0.2,
       decoration: BoxDecoration(
         gradient: RadialGradient(
           colors: [Colors.amber.shade500, AppColors.primary],
