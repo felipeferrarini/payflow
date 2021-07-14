@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:payflow/shared/models/boleto_model.dart';
-import 'package:payflow/shared/widgets/boleto_list/boleto_list_controller.dart';
+import 'package:payflow/shared/controller/boleto_list/boleto_list_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class InsertBoletoController {

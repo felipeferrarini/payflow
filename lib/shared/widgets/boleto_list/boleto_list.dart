@@ -2,7 +2,7 @@ import 'package:animated_card/animated_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:payflow/shared/themes/app_text_styles.dart';
-import 'package:payflow/shared/widgets/boleto_list/boleto_list_controller.dart';
+import 'package:payflow/shared/controller/boleto_list/boleto_list_controller.dart';
 import 'package:payflow/shared/widgets/boleto_tile/boleto_tile.dart';
 
 class BoletoList extends StatelessWidget {

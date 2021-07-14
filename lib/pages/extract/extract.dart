@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:payflow/shared/themes/app_colors.dart';
 import 'package:payflow/shared/themes/app_text_styles.dart';
 import 'package:payflow/shared/widgets/boleto_list/boleto_list.dart';
-import 'package:payflow/shared/widgets/boleto_list/boleto_list_controller.dart';
+import 'package:payflow/shared/controller/boleto_list/boleto_list_controller.dart';
 
 class ExtractPage extends StatelessWidget {
   final controller = Get.find<BoletoListController>();
