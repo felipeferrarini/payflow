@@ -19,16 +19,16 @@ class BarcodeController extends GetxController {
 
   @override
   void onInit() {
-    // getAvailableCameras();
-    // statusGetx.listen((value) {
-    //   if (value.hasBarcode) {
-    //     Get.offNamed('/insert_boleto', arguments: value.barcode);
-    //   }
-    //   if (value.hasError) {
-    //     print(value.error);
-    //   }
-    // });
-    // super.onInit();
+    getAvailableCameras();
+    statusGetx.listen((value) {
+      if (value.hasBarcode) {
+        Get.offNamed('/insert_boleto', arguments: value.barcode);
+      }
+      if (value.hasError) {
+        print(value.error);
+      }
+    });
+    super.onInit();
   }
 
   @override
